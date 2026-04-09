@@ -14,20 +14,27 @@ export const useDashboard = () => {
     })),
   );
 
-  // Track Calls taken - in a real app w=I would have to access a database
+  //  Randomize Calls taken - in a real app I would have to access a database
   const [callsTaken] = useState(
     () => TARGETS.callsTaken + (Math.floor(Math.random() * 21) - 10),
   );
-
-  // useMemo Hook is great for when an app does calculations it allows the app to
-  // calcualte once and only execute it again if provider for example changes
-  const totalSales = useMemo(
-    () =>
-      providers
-        .flatMap((group) => group.products)
-        .reduce((sum, product) => sum + product.unitsSold, 0),
-    [providers], // This is the dependency Array - the trigger for re-calculation
+  // Randomize ADH output to the KPI Card.
+  const adh = useMemo(
+    () => parseFloat((80 + Math.random() * 18).toFixed(1)),
+    [],
   );
+
+  // useMemo Hook is great for when an app does calculations it allows the app to calcualte once and only
+  // execute it again if provider for example changes
+  const totalSales = useMemo(() => {
+    const salesData = providers
+      .flatMap((group) => group.products)
+      .reduce((sum, product) => sum + product.unitsSold, 0);
+    // This is the dependency Array - the trigger for re-calculation
+    const maxSales = Math.floor(callsTaken * 0.43);
+    return Math.min(salesData, maxSales);
+  }, [providers, callsTaken]);
+
   //Calcualte Sales Conversion Rate (SCR)
   const scr = parseFloat(((totalSales / callsTaken) * 100).toFixed(1));
   //Filter only providers who have sales to show in the Badges.
@@ -61,7 +68,6 @@ export const useDashboard = () => {
     setTrendCalls,
     trendScr,
     soldProviders,
-    // Mock ADH
-    adh: 91.2,
+    adh, // dynamic ADH calculations
   };
 };
