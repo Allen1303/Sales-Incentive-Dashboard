@@ -1,5 +1,6 @@
 // Header component for the dashboard
 import { useMemo } from "react";
+import { LayoutDashboard } from "lucide-react";
 
 export default function Header({ agent, onLogout }) {
   const formattedName = useMemo(() => {
@@ -7,20 +8,26 @@ export default function Header({ agent, onLogout }) {
     const first =
       agent.name.charAt(0).toUpperCase() + agent.name.slice(1).toLowerCase();
     const initials = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const randomInitial = initials.charAt(
-      Math.floor(Math.random() * initials.length),
-    );
-    return `${first} ${randomInitial}.`;
+    const charCodeSum = agent.name
+      .split("")
+      .reduce((currentChar, nextChar) => currentChar + nextChar.charAt(0), 0);
+    const lastNameInitials = initials.charAt(charCodeSum % initials.length);
+    return `${first} ${lastNameInitials}.`;
   }, [agent.name]);
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between gap-3 flex-wrap shadow-sm">
-      <div>
-        <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-0.5">
-          Sales Incentive System
-        </p>
-        <h2 className="text-lg font-bold text-slate-900">
-          Performance Dashboard
-        </h2>
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center shadow-sm">
+          <LayoutDashboard className="text-white w-6 h-6" />
+        </div>
+        <div>
+          <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-0.5">
+            Sales Performance System
+          </p>
+          <h2 className="text-lg font-bold text-slate-900">
+            Incentive Dashboard
+          </h2>
+        </div>
       </div>
       <div className="flex items-center gap-3">
         <div className="hidden sm:flex items-center gap-6 text-right">

@@ -1,21 +1,25 @@
 // Sales Tables - Provide Units Sold By Providers for a Incentive Breakdown
+import React from "react";
+
 export default function SalesTable({ providers }) {
   const grandTotal = providers
     .flatMap((group) => group.products)
     .reduce((sum, product) => sum + product.unitValue * product.unitsSold, 0);
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-      <div>
-        <h3 className="text-sm font-bold text-slate-700">
-          {providers.length} Sold Providers - Incentive Breakdown
-        </h3>
+      <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 className="text-sm font-bold text-slate-700">
+            {providers.length} Sold Providers - Incentive Breakdown
+          </h3>
+        </div>
         <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg tabular-nums">
           Grand Total: ${grandTotal.toFixed(2)}
         </span>
       </div>
       {/* Table markup starts here..*/}
       <div className="overflow-x-auto">
-        <table>
+        <table className="w-full text-sm">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               <th className="text-left text-xs font-bold text-slate-500 uppercase tracking-wide px-5 py-3 whitespace-nowrap">
@@ -48,24 +52,22 @@ export default function SalesTable({ providers }) {
                 // group these rows together for React's logic without adding any extra tags
                 <React.Fragment key={group.provider}>
                   <tr>
-                    <td colSpan={4} className="bg-slate-800 px-5 py-2">
-                      <div className="flex items-center justify-between">
-                        <span
-                          className={`text-xs font-bold px-2.5 py-1 rounded-md ${group.badgeCls}`}
-                        >
-                          {group.provider}
-                        </span>
-                        <div className="flex items-center gap-4">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Units:{" "}
-                            <span className="text-white">{providerUnits}</span>
-                          </span>
-                          <span className="text-xs text-slate-400 tabular-nums">
-                            {" "}
-                            Provider total: ${providerTotal.toFixed(2)}
-                          </span>
-                        </div>
+                    <td colSpan={2} className="bg-slate-800 px-5 py-2">
+                      <span
+                        className={`text-xs font-bold px-2.5 py-1 rounded-md ${group.badgeCls}`}
+                      >
+                        {group.provider}
+                      </span>
+                    </td>
+                    <td className="bg-slate-800 px-4 py-2 text-right">
+                      <div className="w-16 ml-auto text-center text-xs font-bold text-white tabular-nums">
+                        {providerUnits}
                       </div>
+                    </td>
+                    <td className="bg-slate-800 px-5 py-2 text-right">
+                      <span className="text-xs text-slate-400 tabular-nums">
+                        Provider total: ${providerTotal.toFixed(2)}
+                      </span>
                     </td>
                   </tr>
                   {/*Row Logic starts here...*/}
