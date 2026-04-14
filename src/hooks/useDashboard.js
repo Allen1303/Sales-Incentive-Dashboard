@@ -18,9 +18,10 @@ export const useDashboard = () => {
   const [callsTaken] = useState(
     () => TARGETS.callsTaken + (Math.floor(Math.random() * 21) - 10),
   );
+
   // Randomize ADH output to the KPI Card.
   const [adh] = useState(() =>
-    parseFloat((80 + Math.random() * 18).toFixed(1)),
+    parseFloat((1 + Math.random() * 99).toFixed(1)),
   );
 
   // useMemo Hook is great for when an app does calculations it allows the app to calcualte once and only

@@ -1,38 +1,43 @@
-// KPI CArd Component
-export default function KPICard({ label, value, target, suffix = "" }) {
-  // ---ADH logic ---------------------------------------
-  const status =
-    value >= target ? "success" : value >= 85 ? "warning" : "danger";
 
-  /* ── MAPPING CONFIG ────────────────────────────────────────────────────
-   * the below object uses Tailwind's colors and labels.
-   * */
-  const config = {
+export default function KPICard({ label, value, target, suffix = '', warningThreshold = 0.9 }) {
+  /**
+   * ── THREE-TIER LOGIC ──────────────────────────────────────────────────
+   * Determine the "Status" based on Incentive rules:
+   */
+  const status = value >= target ? 'success' : value >= (target * warningThreshold) ? 'warning' : 'danger';
+
+  /**
+   * ── MAPPING CONFIG ────────────────────────────────────────────────────
+   * This object maps our status to specific Tailwind colors and labels.
+   */
+  const config = {//   * 1. Success (Green): >= Target
     success: {
-      text: "text-emerald-600",
-      bar: "bg-emerald-500",
-      badge: "bg-emerald-50 text-emerald-700",
-      label: "On Target",
+      text: 'text-emerald-600',
+      bar: 'bg-emerald-500',
+      badge: 'bg-emerald-50 text-emerald-700',
+      label: 'On Target'
     },
-    warning: {
-      text: "text-amber-600",
-      bar: "bg-amber-500",
-      badge: "bg-amber-50 text-amber-700",
-      label: "At Risk",
+    warning: { //   * 2. Warning (Amber): >= 90% of Target (Meeting requirements)
+      text: 'text-amber-600',
+      bar: 'bg-amber-500',
+      badge: 'bg-amber-50 text-amber-700',
+      label: 'At Risk'
     },
-    danger: {
-      text: "text-rose-600",
-      bar: "bg-rose-500",
-      badge: "bg-rose-50 text-rose-700",
-      label: "Below",
-    },
+    danger: { //   * 3. Danger (Red): < 90% of Target (Below requirements)
+      text: 'text-rose-600',
+      bar: 'bg-rose-500',
+      badge: 'bg-rose-50 text-rose-700',
+      label: 'Below'
+    }
   };
+
   const active = config[status];
   const barWidth = Math.min((value / target) * 100, 100).toFixed(1);
+
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col shadow-sm hover:shadow-md transition-shadow h-full">
       {/* Header Section */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-3">
         <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
           {label}
         </p>
@@ -43,16 +48,15 @@ export default function KPICard({ label, value, target, suffix = "" }) {
         </span>
       </div>
       {/* Main Value */}
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-baseline gap-1 mb-4">
         {" "}
         <p className={`text-3xl font-bold tabular-nums ${active.text}`}>
-          {value}
-          {suffix}
+          {value} {suffix}
         </p>
       </div>
 
       {/* Progress Bar Section */}
-      <div>
+      <div className="mt-auto">
         <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
           <div
             className={`h-full transition-all duration-700 ease-out ${active.bar}`}
@@ -63,13 +67,12 @@ export default function KPICard({ label, value, target, suffix = "" }) {
           <p className="text-[10px] text-slate-400">
             Target:
             <span className="font-semibold text-slate-500">
-              {target}
-              {suffix}
+              {target} {suffix}
             </span>
-          </p>
+          </p>{" "}
           {status === "warning" && (
             <p className="text-[10px] font-medium text-amber-600 animate-pulse">
-              Bonus Eligible at {target}%
+              Bonus Eligible at {target}{suffix}
             </p>
           )}
         </div>

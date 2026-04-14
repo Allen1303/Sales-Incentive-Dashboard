@@ -3,6 +3,7 @@ import { AGENT, TARGETS } from "../data/agentData";
 import { useDashboard } from "../hooks/useDashboard";
 import Header from "../components/layout/Header";
 import KPICard from "../components/ui/KPICard";
+import DonutKPICard from "../components/ui/DonutKPICard"
 import SalesTable from "../components/sections/SalesTable";
 import TrendCalculator from "../components/sections/TrendCalculator";
 
@@ -80,13 +81,13 @@ export default function DashboardPage({ userName, onLogout }) {
               value={totalSales}
               target={dynamicSalesTarget}
             />
-            <KPICard
+            <DonutKPICard
               label="SCR %"
               value={scr}
               target={TARGETS.scr}
               suffix="%"
             />
-            <KPICard
+            <DonutKPICard
               label="ADH %"
               value={adh}
               target={TARGETS.adh}
