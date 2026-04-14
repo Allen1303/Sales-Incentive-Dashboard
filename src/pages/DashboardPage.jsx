@@ -80,6 +80,7 @@ export default function DashboardPage({ userName, onLogout }) {
               label="Sales Made"
               value={totalSales}
               target={dynamicSalesTarget}
+              targetNotes=" Based on calls taken"
             />
             <DonutKPICard
               label="SCR %"

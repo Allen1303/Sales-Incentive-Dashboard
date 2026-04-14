@@ -1,5 +1,5 @@
 
-export default function KPICard({ label, value, target, suffix = '', warningThreshold = 0.9 }) {
+export default function KPICard({ label, value, target, suffix = '', targetNotes = null, warningThreshold = 0.9 }) {
   /**
    * ── THREE-TIER LOGIC ──────────────────────────────────────────────────
    * Determine the "Status" based on Incentive rules:
@@ -69,6 +69,9 @@ export default function KPICard({ label, value, target, suffix = '', warningThre
             <span className="font-semibold text-slate-500">
               {target} {suffix}
             </span>
+            {targetNotes && (
+              <span className="italic text-slate-400 ml-0.5">( {targetNotes} )</span>
+            )}
           </p>{" "}
           {status === "warning" && (
             <p className="text-[10px] font-medium text-amber-600 animate-pulse">

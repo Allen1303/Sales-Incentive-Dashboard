@@ -6,6 +6,7 @@ export default function DonutKPICard({
   value,
   target,
   suffix = '%',
+  targetNotes = null,
   warningThreshold = 0.9
 }) {
   // Calculate attainment (how much of the target has been reached)
@@ -41,8 +42,8 @@ export default function DonutKPICard({
         </p>
         <span
           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${status === 'success' ? 'bg-emerald-50 text-emerald-700' :
-              status === 'warning' ? 'bg-amber-50 text-amber-700' :
-                'bg-rose-50 text-rose-700'
+            status === 'warning' ? 'bg-amber-50 text-amber-700' :
+              'bg-rose-50 text-rose-700'
             }`}
         >
           {status === 'success' ? 'On Target' : status === 'warning' ? 'At Risk' : 'Below'}
@@ -76,8 +77,8 @@ export default function DonutKPICard({
         {/* Center Label */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <p className={`text-xl font-bold tabular-nums ${status === 'success' ? 'text-emerald-600' :
-              status === 'warning' ? 'text-amber-600' :
-                'text-rose-600'
+            status === 'warning' ? 'text-amber-600' :
+              'text-rose-600'
             }`}>
             {value}{suffix}
           </p>
