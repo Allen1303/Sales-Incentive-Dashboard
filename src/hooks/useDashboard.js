@@ -7,10 +7,15 @@ export const useDashboard = () => {
   const [providers] = useState(() =>
     INITIAL_PROVIDERS.map((group) => ({
       ...group,
-      products: group.products.map((product) => ({
-        ...product,
-        unitsSold: Math.floor(Math.random() * 4) + 1,
-      })),
+      products: group.products.map((product) => {
+        // check for primsry campaign
+        const isPrimary = group.provider === "AT&T";
+        const units = isPrimary ? Math.floor(Math.random() * 6) + 5 : Math.floor(Math.random() * 4) + 1;
+        return {
+          ...product,
+          unitsSold: units,
+        };
+      }),
     })),
   );
 
@@ -21,7 +26,7 @@ export const useDashboard = () => {
 
   // Randomize ADH output to the KPI Card.
   const [adh] = useState(() =>
-    parseFloat((1 + Math.random() * 99).toFixed(1)),
+    parseFloat((80 + Math.random() * 20).toFixed(1)),
   );
 
   // useMemo Hook is great for when an app does calculations it allows the app to calcualte once and only
