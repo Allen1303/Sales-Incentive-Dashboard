@@ -1,25 +1,20 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, ResponsiveContainer } from 'recharts';
 
 export default function DonutKPICard({
   label,
   value,
   target,
   suffix = '%',
-  targetNotes = null,
-  warningThreshold = 0.9
+  warningThreshold = 0.9,
+  targetNotes = null
 }) {
   // Calculate attainment (how much of the target has been reached)
   const attainment = (value / target) * 100;
-  const variance = attainment - 100;
+  const variance = value - target;
 
   // For the donut visualization, we use attainment capped at 100%
   const visualValue = Math.min(100, attainment);
-
-  const data = [
-    { name: label, value: visualValue },
-    { name: 'Remaining', value: Math.max(0, 100 - visualValue) },
-  ];
 
   // Logic: Success if >= target, Warning if >= 90% of target, else Danger
   const status = value >= target ? 'success' : value >= (target * warningThreshold) ? 'warning' : 'danger';
@@ -33,6 +28,11 @@ export default function DonutKPICard({
 
   const activeColor = colors[status];
 
+  const data = [
+    { name: label, value: visualValue, fill: activeColor },
+    { name: 'Remaining', value: Math.max(0, 100 - visualValue), fill: colors.bg },
+  ];
+
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-2 shadow-sm hover:shadow-md transition-shadow h-full">
       {/* Header Section */}
@@ -42,8 +42,8 @@ export default function DonutKPICard({
         </p>
         <span
           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${status === 'success' ? 'bg-emerald-50 text-emerald-700' :
-            status === 'warning' ? 'bg-amber-50 text-amber-700' :
-              'bg-rose-50 text-rose-700'
+              status === 'warning' ? 'bg-amber-50 text-amber-700' :
+                'bg-rose-50 text-rose-700'
             }`}
         >
           {status === 'success' ? 'On Target' : status === 'warning' ? 'At Risk' : 'Below'}
@@ -67,18 +67,15 @@ export default function DonutKPICard({
               stroke="none"
               isAnimationActive={true}
               animationDuration={1000}
-            >
-              <Cell fill={activeColor} />
-              <Cell fill={colors.bg} />
-            </Pie>
+            />
           </PieChart>
         </ResponsiveContainer>
 
         {/* Center Label */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <p className={`text-xl font-bold tabular-nums ${status === 'success' ? 'text-emerald-600' :
-            status === 'warning' ? 'text-amber-600' :
-              'text-rose-600'
+              status === 'warning' ? 'text-amber-600' :
+                'text-rose-600'
             }`}>
             {value}{suffix}
           </p>
@@ -90,6 +87,11 @@ export default function DonutKPICard({
         <div className="flex items-center gap-1.5">
           <p className="text-[10px] text-slate-400">
             Target: <span className="font-semibold text-slate-500">{target}{suffix}</span>
+            {targetNotes && (
+              <span className="italic text-slate-400 ml-1">
+                ({targetNotes})
+              </span>
+            )}
           </p>
           <span className="text-[10px] text-slate-300">→</span>
           <p className={`text-[9px] font-bold ${variance >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>

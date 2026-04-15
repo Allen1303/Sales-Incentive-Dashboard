@@ -1,19 +1,31 @@
-// Dashboad Page Component holds all smaller components
-import { AGENT, TARGETS } from "../data/agentData";
-import { useDashboard } from "../hooks/useDashboard";
-import Header from "../components/layout/Header";
-import KPICard from "../components/ui/KPICard";
-import DonutKPICard from "../components/ui/DonutKPICard"
-import SalesTable from "../components/sections/SalesTable";
-import TrendCalculator from "../components/sections/TrendCalculator";
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * WHAT IS A PAGE COMPONENT?
+ * This is the "Parent" that holds all the smaller "Child" components.
+ * It's responsible for fetching data (via our hook) and arranging the layout.
+ */
+
+import { AGENT, TARGETS } from '../data/agentData';
+import { useDashboard } from '../hooks/useDashboard';
+import Header from '../components/layout/Header';
+import KPICard from '../components/ui/KPICard';
+import DonutKPICard from '../components/ui/DonutKPICard';
+import SalesTable from '../components/sections/SalesTable';
+import TrendCalculator from '../components/sections/TrendCalculator';
 
 export default function DashboardPage({ userName, onLogout }) {
-  // Destructure all necessary values and props and useState functions/methods
-  console.log("DashboardPage: Rendering Start. userName:", userName);
+  console.log("DashboardPage: Rendering start. userName:", userName);
+
   const {
     soldProviders,
     callsTaken,
+    callsTrend,
     totalSales,
+    salesTrend,
     scr,
     adh,
     dynamicSalesTarget,
@@ -23,30 +35,38 @@ export default function DashboardPage({ userName, onLogout }) {
     setTrendCalls,
     trendScr,
   } = useDashboard();
+
+  console.log("DashboardPage: Data from useDashboard:", {
+    soldProvidersCount: soldProviders?.length,
+    totalSales,
+    scr
+  });
+
   return (
     <div className="min-h-screen bg-slate-50">
-      {/*container div starts here..*/}
       <Header
         agent={{
           name: userName,
           employeeId: AGENT.employeeId,
-          team: AGENT.team,
+          team: AGENT.team
         }}
         onLogout={onLogout}
       />
+
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-8">
-        {/* Period Bar + provider badges */}
+        {/* Period bar + provider badges */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
-            Performance Period:{" "}
+            Performance Period:{' '}
             <span className="font-semibold text-slate-800">April 2026</span>
           </p>
+
           <div className="flex flex-col items-end gap-2">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
               Sold Providers
             </p>
             <div className="flex items-center gap-2 flex-wrap justify-end">
-              {soldProviders.map((group) => (
+              {soldProviders.map(group => (
                 <span
                   key={group.provider}
                   className={`text-xs font-bold px-2 py-1 rounded-md ${group.badgeCls}`}
@@ -57,6 +77,7 @@ export default function DashboardPage({ userName, onLogout }) {
             </div>
           </div>
         </div>
+
         {/* Trend Calculator Section */}
         <TrendCalculator
           trendSales={trendSales}
@@ -65,6 +86,7 @@ export default function DashboardPage({ userName, onLogout }) {
           setTrendCalls={setTrendCalls}
           trendScr={trendScr}
         />
+
         {/* KPI Cards Section */}
         <section>
           <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-4">
@@ -75,33 +97,34 @@ export default function DashboardPage({ userName, onLogout }) {
               label="Calls Taken"
               value={callsTaken}
               target={TARGETS.callsTaken}
+              chartData={callsTrend}
             />
             <KPICard
               label="Sales Made"
               value={totalSales}
               target={dynamicSalesTarget}
-              targetNotes=" Based on calls taken"
+              chartData={salesTrend}
+              targetNotes="Based on calls taken"
             />
             <DonutKPICard
               label="SCR %"
               value={scr}
               target={TARGETS.scr}
-              suffix="%"
             />
             <DonutKPICard
               label="ADH %"
               value={adh}
               target={TARGETS.adh}
-              suffix="%"
             />
           </div>
         </section>
-        {/*Sales Table Breakdown */}
+
+        {/* Sales Table Breakdown */}
         <section>
           <SalesTable providers={soldProviders} />
         </section>
       </main>
-      {/*container div ends here..*/}
     </div>
   );
 }
+
