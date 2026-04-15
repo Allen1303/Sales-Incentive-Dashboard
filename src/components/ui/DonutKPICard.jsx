@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
@@ -18,7 +13,7 @@ export default function DonutKPICard({
   const attainment = (value / target) * 100;
   const variance = value - target;
 
-  // For the donut visualization, we use attainment capped at 100%
+  // For the donut visualization, attainment capped at 100%
   const visualValue = Math.min(100, attainment);
 
   // Logic: Success if >= target, Warning if >= 90% of target, else Danger
@@ -73,11 +68,11 @@ export default function DonutKPICard({
           <PieChart>
             <defs>
               {/* 
-                SMOOTH-SHARP 3D:
-                1. Diagonal Gradient: Creates a natural light-to-shadow transition across the volume.
-                2. Multi-stop: Spreads the transition for a "smoother" feel while keeping the core color solid.
-                3. Vector Stroke: A crisp 1px stroke defines the edge with zero blur.
-              */}
+                  SMOOTH-SHARP 3D:
+                  1. Diagonal Gradient: Creates a natural light-to-shadow transition across the volume.
+                  2. Multi-stop: Spreads the transition for a "smoother" feel while keeping the core color solid.
+                  3. Vector Stroke: A crisp 1px stroke defines the edge with zero blur.
+                */}
               <linearGradient
                 id={`gradient-${label.replace(/\s+/g, "")}`}
                 x1="0"
