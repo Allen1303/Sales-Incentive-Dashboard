@@ -16,6 +16,7 @@ import KPICard from '../components/ui/KPICard';
 import DonutKPICard from '../components/ui/DonutKPICard';
 import SalesTable from '../components/sections/SalesTable';
 import TrendCalculator from '../components/sections/TrendCalculator';
+import ScheduleTracker from '../components/sections/ScheduleTracker';
 
 export default function DashboardPage({ userName, onLogout }) {
   console.log("DashboardPage: Rendering start. userName:", userName);
@@ -34,6 +35,10 @@ export default function DashboardPage({ userName, onLogout }) {
     trendCalls,
     setTrendCalls,
     trendScr,
+    schedule,
+    infractionStats,
+    updateDayStatus,
+    rollRandomSchedule,
   } = useDashboard();
 
   console.log("DashboardPage: Data from useDashboard:", {
@@ -119,12 +124,27 @@ export default function DashboardPage({ userName, onLogout }) {
           </div>
         </section>
 
+        {/* Schedule & Behavior Tracker */}
+        <section>
+          <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-4">
+            Schedule & Attendance Behavior Tracker
+          </p>
+          <ScheduleTracker
+            schedule={schedule}
+            infractionStats={infractionStats}
+            updateDayStatus={updateDayStatus}
+            rollRandomSchedule={rollRandomSchedule}
+          />
+        </section>
+
         {/* Sales Table Breakdown */}
         <section>
-          <SalesTable providers={soldProviders} />
+          <SalesTable
+            providers={soldProviders}
+            attendanceDeduction={infractionStats.deduction}
+          />
         </section>
       </main>
     </div>
   );
 }
-
